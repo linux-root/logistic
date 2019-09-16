@@ -1,0 +1,11 @@
+{
+  "name": "logistic",
+  "connector": "mongodb",
+  "url": "mongodb://kurro:secret7@ds117749/logistic",
+  "host": "",
+  "port": 0,
+  "user": "",
+  "password": "",
+  "database": "",
+  "useNewUrlParser": true
+}
