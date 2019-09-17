@@ -16,14 +16,30 @@ import {
   put,
   del,
   requestBody,
+  HttpErrors
 } from '@loopback/rest';
-import {Manager} from '../models';
-import {ManagerRepository} from '../repositories';
+import {Manager, User} from '../models';
+import {Credentials, ManagerRepository} from '../repositories';
+import {PasswordHasherBindings, TokenServiceBindings, UserServiceBindings} from '../keys';
+import {validateCredentials} from '../services/validator';
+import {TokenService, UserService} from '@loopback/authentication';
+import {inject} from '@loopback/core';
+import {PasswordHasher} from '../services/hash.password.bcryptjs';
+import * as _ from 'lodash';
 
 export class MangerController {
   constructor(
     @repository(ManagerRepository)
     public managerRepository : ManagerRepository,
+
+    @inject(PasswordHasherBindings.PASSWORD_HASHER)
+    public passwordHasher: PasswordHasher,
+
+    @inject(TokenServiceBindings.TOKEN_SERVICE)
+    public jwtService: TokenService,
+
+    @inject(UserServiceBindings.USER_SERVICE)
+    public userService: UserService<User, Credentials>
   ) {}
 
   @post('/managers', {
@@ -44,7 +60,21 @@ export class MangerController {
     })
     manager: Omit<Manager, 'id'>,
   ): Promise<Manager> {
-    return this.managerRepository.create(manager);
+ manager.password = await this.passwordHasher.hashPassword(manager.password);
+    try {
+      // create the new user
+      const savedUser = await this.managerRepository.create(manager);
+      delete savedUser.password; //delete password before returning to client
+
+      return savedUser;
+    } catch (error) {
+      // MongoError 11000 duplicate key
+      if (error.code === 11000 && error.errmsg.includes('index: uniqueEmail')) {
+        throw new HttpErrors.Conflict('Email value is already taken');
+      } else {
+        throw error;
+      }
+    }
   }
 
   @get('/managers/count', {
