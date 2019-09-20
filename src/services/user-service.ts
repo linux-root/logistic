@@ -3,8 +3,8 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 import {HttpErrors} from '@loopback/rest';
-import {Credentials, UserRepository} from '../repositories/user.repository';
-import {User} from '../models/user.model';
+import {Credentials, UserRepository} from '../repositories';
+import {User} from '../models';
 import {UserService} from '@loopback/authentication';
 import {UserProfile, securityId} from '@loopback/security';
 import {repository} from '@loopback/repository';
