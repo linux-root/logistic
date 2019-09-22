@@ -11,11 +11,11 @@ import {repository} from '@loopback/repository';
 import {PasswordHasher} from './hash.password.bcryptjs';
 import {PasswordHasherBindings} from '../keys';
 import {inject} from '@loopback/context';
-// import {UserRepository} from '../repositories';
+import {UserRepository} from '../repositories';
 
 export class MyUserService implements UserService<User, Credentials> {
   constructor(
-    // @repository(UserRepository) public userRepository: UserRepository,
+    @repository(UserRepository) public userRepository: UserRepository,
     @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public passwordHasher: PasswordHasher,
   ) {}
@@ -23,10 +23,9 @@ export class MyUserService implements UserService<User, Credentials> {
   async verifyCredentials(credentials: Credentials): Promise<User> {
     const invalidCredentialsError = 'Invalid email or password.';
 
-   /* const foundUser = await this.userRepository.findOne({
+    const foundUser = await this.userRepository.findOne({
       where: {email: credentials.email},
-    });*/
-   const foundUser = new User();
+    });
 
     if (!foundUser) {
       throw new HttpErrors.Unauthorized(invalidCredentialsError);

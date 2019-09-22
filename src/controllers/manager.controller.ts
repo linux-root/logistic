@@ -31,6 +31,7 @@ import {
 import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
 import {Credentials} from '../models';
 import {PasswordHasher} from '../services/hash.password.bcryptjs';
+import {CredentialsRequestBody, UserProfileSchema} from './specs/user-controller.specs'
 
 import {
   TokenServiceBindings,
@@ -201,5 +202,37 @@ export class ManagerController {
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.managerRepository.deleteById(id);
+  }
+
+  @post('/managers/login', {
+    responses: {
+      '200': {
+        description: 'Token',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                token: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  async login(@requestBody(CredentialsRequestBody) credentials: Credentials,): Promise<{token: string}> {
+    // ensure the user exists, and the password is correct
+    const user = await this.userService.verifyCredentials(credentials);
+
+    // convert a User object into a UserProfile object (reduced set of properties)
+    const userProfile = this.userService.convertToUserProfile(user);
+
+    // create a JSON Web Token based on the user profile
+    const token = await this.jwtService.generateToken(userProfile);
+
+    return {token};
   }
 }
