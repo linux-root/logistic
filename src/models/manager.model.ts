@@ -1,4 +1,4 @@
-import {model, property} from '@loopback/repository';
+import {model} from '@loopback/repository';
 import {User} from './user.model';
 
 @model({settings: {}})
