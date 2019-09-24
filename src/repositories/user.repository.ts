@@ -3,19 +3,12 @@ import {User, UserRelations} from '../models';
 import {LogisticDataSource} from '../datasources';
 import {inject} from '@loopback/core';
 
-export class UserRepository extends DefaultCrudRepository<
-  User,
+export class UserRepository extends DefaultCrudRepository<User,
   typeof User.prototype.id,
-  UserRelations
-> {
+  UserRelations> {
   constructor(
     @inject('datasources.logistic') dataSource: LogisticDataSource,
   ) {
     super(User, dataSource);
   }
 }
-
-export type Credentials = {
-  email: string;
-  password: string;
-};

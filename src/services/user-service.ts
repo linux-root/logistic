@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 import {HttpErrors} from '@loopback/rest';
-import {Credentials, UserRepository} from '../repositories';
+import {Credentials} from '../models';
 import {User} from '../models';
 import {UserService} from '@loopback/authentication';
 import {UserProfile, securityId} from '@loopback/security';
@@ -11,6 +11,7 @@ import {repository} from '@loopback/repository';
 import {PasswordHasher} from './hash.password.bcryptjs';
 import {PasswordHasherBindings} from '../keys';
 import {inject} from '@loopback/context';
+import {UserRepository} from '../repositories';
 
 export class MyUserService implements UserService<User, Credentials> {
   constructor(

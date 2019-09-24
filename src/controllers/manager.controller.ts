@@ -19,27 +19,37 @@ import {
   HttpErrors
 } from '@loopback/rest';
 import {Manager, User} from '../models';
-import {Credentials, ManagerRepository} from '../repositories';
-import {PasswordHasherBindings, TokenServiceBindings, UserServiceBindings} from '../keys';
+import {ManagerRepository} from '../repositories';
+
 import {validateCredentials} from '../services/validator';
-import {TokenService, UserService} from '@loopback/authentication';
 import {inject} from '@loopback/core';
+import {
+  authenticate,
+  TokenService,
+  UserService,
+} from '@loopback/authentication';
+import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
+import {Credentials} from '../models';
 import {PasswordHasher} from '../services/hash.password.bcryptjs';
+import {CredentialsRequestBody, UserProfileSchema} from './specs/user-controller.specs'
+
+import {
+  TokenServiceBindings,
+  PasswordHasherBindings,
+  UserServiceBindings,
+} from '../keys';
 import * as _ from 'lodash';
 
-export class MangerController {
+export class ManagerController {
   constructor(
     @repository(ManagerRepository)
     public managerRepository : ManagerRepository,
-
     @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public passwordHasher: PasswordHasher,
-
     @inject(TokenServiceBindings.TOKEN_SERVICE)
     public jwtService: TokenService,
-
     @inject(UserServiceBindings.USER_SERVICE)
-    public userService: UserService<User, Credentials>
+    public userService: UserService<User, Credentials>,
   ) {}
 
   @post('/managers', {
@@ -54,17 +64,22 @@ export class MangerController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Manager, {exclude: ['id']}),
+          schema: getModelSchemaRef(Manager),
         },
       },
     })
-    manager: Omit<Manager, 'id'>,
+    manager: Manager,
   ): Promise<Manager> {
- manager.password = await this.passwordHasher.hashPassword(manager.password);
+    validateCredentials(_.pick(manager, ['email', 'password']));
+
+    // encrypt the password
+    // eslint-disable-next-line require-atomic-updates
+    manager.password = await this.passwordHasher.hashPassword(manager.password);
+
     try {
       // create the new user
       const savedUser = await this.managerRepository.create(manager);
-      delete savedUser.password; //delete password before returning to client
+      delete savedUser.password;
 
       return savedUser;
     } catch (error) {
@@ -187,5 +202,37 @@ export class MangerController {
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.managerRepository.deleteById(id);
+  }
+
+  @post('/managers/login', {
+    responses: {
+      '200': {
+        description: 'Token',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                token: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  async login(@requestBody(CredentialsRequestBody) credentials: Credentials,): Promise<{token: string}> {
+    // ensure the user exists, and the password is correct
+    const user = await this.userService.verifyCredentials(credentials);
+
+    // convert a User object into a UserProfile object (reduced set of properties)
+    const userProfile = this.userService.convertToUserProfile(user);
+
+    // create a JSON Web Token based on the user profile
+    const token = await this.jwtService.generateToken(userProfile);
+
+    return {token};
   }
 }
