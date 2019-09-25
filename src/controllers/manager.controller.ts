@@ -48,7 +48,7 @@ export class ManagerController {
     public passwordHasher: PasswordHasher,
     @inject(TokenServiceBindings.TOKEN_SERVICE)
     public jwtService: TokenService,
-    @inject(UserServiceBindings.USER_SERVICE)
+    @inject(UserServiceBindings.MANAGER_SERVICE)
     public userService: UserService<User, Credentials>,
   ) {}
 
@@ -64,7 +64,7 @@ export class ManagerController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Manager),
+          schema: getModelSchemaRef(Manager, {exclude: ['id']}),
         },
       },
     })

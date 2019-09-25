@@ -13,7 +13,7 @@ import {AuthenticationComponent} from '@loopback/authentication'
 import {PasswordHasherBindings, TokenServiceBindings, TokenServiceConstants, UserServiceBindings} from './keys';
 import {JWTService} from './services/jwt-service';
 import {BcryptHasher} from './services/hash.password.bcryptjs';
-import {MyUserService} from './services/user-service';
+import ManagerService from './services/manager-service';
 
 export class LogisticApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -63,7 +63,6 @@ export class LogisticApplication extends BootMixin(
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 
-    this.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);
-
+    this.bind(UserServiceBindings.MANAGER_SERVICE).toClass(ManagerService);
   }
 }

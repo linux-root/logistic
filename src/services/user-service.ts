@@ -7,25 +7,18 @@ import {Credentials} from '../models';
 import {User} from '../models';
 import {UserService} from '@loopback/authentication';
 import {UserProfile, securityId} from '@loopback/security';
-import {repository} from '@loopback/repository';
 import {PasswordHasher} from './hash.password.bcryptjs';
-import {PasswordHasherBindings} from '../keys';
-import {inject} from '@loopback/context';
-import {UserRepository} from '../repositories';
 
-export class MyUserService implements UserService<User, Credentials> {
-  constructor(
-    @repository(UserRepository) public userRepository: UserRepository,
-    @inject(PasswordHasherBindings.PASSWORD_HASHER)
-    public passwordHasher: PasswordHasher,
-  ) {}
+export abstract class AbstractUserService implements UserService<User, Credentials> {
+  protected constructor( public passwordHasher: PasswordHasher ) {}
+
+   async abstract findUser(credentials: Credentials): Promise<User>;
+
 
   async verifyCredentials(credentials: Credentials): Promise<User> {
     const invalidCredentialsError = 'Invalid email or password.';
 
-    const foundUser = await this.userRepository.findOne({
-      where: {email: credentials.email},
-    });
+    const foundUser = await this.findUser(credentials);
 
     if (!foundUser) {
       throw new HttpErrors.Unauthorized(invalidCredentialsError);
