@@ -14,6 +14,7 @@ import {PasswordHasherBindings, TokenServiceBindings, TokenServiceConstants, Use
 import {JWTService} from './services/jwt-service';
 import {BcryptHasher} from './services/hash.password.bcryptjs';
 import ManagerService from './services/manager-service';
+simport ShipperService from './services/shipper-service';
 
 export class LogisticApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -64,5 +65,6 @@ export class LogisticApplication extends BootMixin(
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 
     this.bind(UserServiceBindings.MANAGER_SERVICE).toClass(ManagerService);
+    this.bind(UserServiceBindings.SHIPPER_SERVICE).toClass(ShipperService);
   }
 }
