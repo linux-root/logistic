@@ -16,7 +16,7 @@ export default class ManagerService extends AbstractUserService {
   }
 
   async findUser(credentials: Credentials): Promise<User> {
-  const manager = await this.managerRepository.findOne({
+/*  const manager = await this.managerRepository.findOne({
       where: {email: credentials.email}
     });
 
@@ -27,7 +27,7 @@ export default class ManagerService extends AbstractUserService {
       full_name:manager.full_name,
       password: manager.password,
       phone: manager.phone });
-  }
+  }*/
     return new User();
   }
 }

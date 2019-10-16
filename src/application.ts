@@ -14,8 +14,7 @@ import {PasswordHasherBindings, TokenServiceBindings, TokenServiceConstants, Use
 import {JWTService} from './services/jwt-service';
 import {BcryptHasher} from './services/hash.password.bcryptjs';
 import ManagerService from './services/manager-service';
-simport ShipperService from './services/shipper-service';
-
+import ShipperService from './services/shipper-service';
 export class LogisticApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
 ) {

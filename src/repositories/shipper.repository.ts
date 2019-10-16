@@ -1,21 +1,21 @@
 import {DefaultCrudRepository, repository, BelongsToAccessor} from '@loopback/repository';
-import {Manager, ManagerRelations, User} from '../models';
+import {Shipper, ShipperRelations, User} from '../models';
 import {LogisticDataSource} from '../datasources';
 import {inject, Getter} from '@loopback/core';
 import {UserRepository} from './user.repository';
 
-export class ManagerRepository extends DefaultCrudRepository<
-  Manager,
-  typeof Manager.prototype.id,
-  ManagerRelations
+export class ShipperRepository extends DefaultCrudRepository<
+  Shipper,
+  typeof Shipper.prototype.id,
+  ShipperRelations
 > {
 
-  public readonly user: BelongsToAccessor<User, typeof Manager.prototype.id>;
+  public readonly user: BelongsToAccessor<User, typeof Shipper.prototype.id>;
 
   constructor(
     @inject('datasources.logistic') dataSource: LogisticDataSource, @repository.getter('UserRepository') protected userRepositoryGetter: Getter<UserRepository>,
   ) {
-    super(Manager, dataSource);
+    super(Shipper, dataSource);
     this.user = this.createBelongsToAccessorFor('user', userRepositoryGetter,);
   }
 }
