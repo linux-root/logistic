@@ -26,11 +26,11 @@ export class UserController {
     public userRepository : UserRepository,
   ) {}
 
-  @post('/users', {
+  @post('/users/manager', {
     responses: {
       '200': {
-        description: 'User model instance',
-        content: {'application/json': {schema: getModelSchemaRef(User)}},
+        description: 'create Manager user',
+        content: {'application/json': {schema: getModelSchemaRef(Manager)}},
       },
     },
   })
@@ -38,20 +38,20 @@ export class UserController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(User, {exclude: ['id']}),
+          schema: getModelSchemaRef(Manager, {exclude: ['id']}),
         },
       },
     })
-    user: Omit<User, 'id'>,
+    user: Omit<Manager, 'id'>,
   ): Promise<User> {
-    const x = await this.userRepository.create(user);
-    const id = x.id.toString();
+    const createdUser = await this.userRepository.create(user);
+    const id = createdUser.id.toString();
     if(user.is_manager){
       this.userRepository.manager(id).create({});
     } else {
-      this.userRepository.
+      this.userRepository.shipper(id).create({});
     }
-    return x;
+    return createdUser;
   }
 
   @get('/users/count', {
