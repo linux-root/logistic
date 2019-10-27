@@ -1,5 +1,4 @@
-import {Entity, model, property, hasOne} from '@loopback/repository';
-import {Manager} from './manager.model';
+import {Entity, model, property} from '@loopback/repository';
 
 @model({settings: {strict: false}})
 export class User extends Entity {
@@ -36,8 +35,20 @@ export class User extends Entity {
   })
   is_manager?: boolean;
 
-  @hasOne(() => Manager, {keyTo: 'userId'})
-  manager?: Manager;
+  @property({
+    type: 'number',
+  })
+  citizen_id?: number;
+
+  @property({
+    type: 'string',
+  })
+  working_time?: string;
+
+  @property({
+    type: 'boolean',
+  })
+  is_active?: boolean;
 
   // Define well-known properties here
 

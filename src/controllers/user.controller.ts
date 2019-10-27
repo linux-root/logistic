@@ -17,20 +17,35 @@ import {
   del,
   requestBody,
 } from '@loopback/rest';
-import {Manager, User} from '../models';
+import {User} from '../models';
 import {UserRepository} from '../repositories';
+import {PasswordHasherBindings, TokenServiceBindings, UserServiceBindings} from '../keys';
+import {TokenService, UserService} from '@loopback/authentication';
+import {Credentials} from 'crypto';
+import {inject} from '@loopback/context';
+import {PasswordHasher} from '../services/hash.password.bcryptjs';
+import {validateCredentials} from '../services/validator';
+import {CredentialsRequestBody} from './specs/user-controller.specs';
+import * as _ from 'lodash';
+
 
 export class UserController {
   constructor(
     @repository(UserRepository)
     public userRepository : UserRepository,
+    @inject(PasswordHasherBindings.PASSWORD_HASHER)
+    public passwordHasher: PasswordHasher,
+    @inject(TokenServiceBindings.TOKEN_SERVICE)
+    public jwtService: TokenService,
+    @inject(UserServiceBindings.USER_SERVICE)
+    public userService: UserService<User, Credentials>,
   ) {}
 
-  @post('/users/manager', {
+  @post('/users', {
     responses: {
       '200': {
-        description: 'create Manager user',
-        content: {'application/json': {schema: getModelSchemaRef(Manager)}},
+        description: 'User model instance',
+        content: {'application/json': {schema: getModelSchemaRef(User)}},
       },
     },
   })
@@ -38,20 +53,19 @@ export class UserController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Manager, {exclude: ['id']}),
+          schema: getModelSchemaRef(User, {exclude: ['id']}),
         },
       },
     })
-    user: Omit<Manager, 'id'>,
+    user: Omit<User, 'id'>,
   ): Promise<User> {
-    const createdUser = await this.userRepository.create(user);
-    const id = createdUser.id.toString();
-    if(user.is_manager){
-      this.userRepository.manager(id).create({});
-    } else {
-      this.userRepository.shipper(id).create({});
-    }
-    return createdUser;
+    validateCredentials(_.pick(user, ['email', 'password']));
+    // encrypt the password
+    user.password = await this.passwordHasher.hashPassword(user.password);
+    // create the new user
+    const savedUser = await this.userRepository.create(user);
+    delete savedUser.password;
+    return savedUser;
   }
 
   @get('/users/count', {
@@ -120,18 +134,6 @@ export class UserController {
     return this.userRepository.findById(id);
   }
 
-  @get('/users/{id}/manager', {
-    responses: {
-      '200': {
-        description: 'Manager model instance',
-        content: {'application/json': {schema: getModelSchemaRef(Manager)}},
-      },
-    },
-  })
-  async findManagerByUserId(@param.path.string('id') id: string): Promise<Manager> {
-    return this.userRepository.manager(id).get();
-  }
-
   @patch('/users/{id}', {
     responses: {
       '204': {
@@ -177,4 +179,39 @@ export class UserController {
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.userRepository.deleteById(id);
   }
+
+  @post('/users/login', {
+    responses: {
+      '200': {
+        description: 'Token',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                token: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  async login(
+    @requestBody(CredentialsRequestBody) credentials: Credentials,
+  ): Promise<{token: string}> {
+    // ensure the user exists, and the password is correct
+    const user = await this.userService.verifyCredentials(credentials);
+
+    // convert a User object into a UserProfile object (reduced set of properties)
+    const userProfile = this.userService.convertToUserProfile(user);
+
+    // create a JSON Web Token based on the user profile
+    const token = await this.jwtService.generateToken(userProfile);
+
+    return {token};
+  }
+
 }

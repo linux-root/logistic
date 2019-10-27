@@ -9,15 +9,12 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import * as path from 'path';
 import {MySequence} from './sequence';
-import {AuthenticationComponent} from '@loopback/authentication'
+import {AuthenticationComponent, UserService} from '@loopback/authentication';
 import {PasswordHasherBindings, TokenServiceBindings, TokenServiceConstants, UserServiceBindings} from './keys';
 import {JWTService} from './services/jwt-service';
 import {BcryptHasher} from './services/hash.password.bcryptjs';
-import ManagerService from './services/manager-service';
-import ShipperService from './services/shipper-service';
-export class LogisticApplication extends BootMixin(
-  ServiceMixin(RepositoryMixin(RestApplication)),
-) {
+import {LogisticUserService} from './services/user-service';
+export class LogisticApplication extends BootMixin( ServiceMixin(RepositoryMixin(RestApplication))) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
 
@@ -58,12 +55,10 @@ export class LogisticApplication extends BootMixin(
     );
 
     this.bind(TokenServiceBindings.TOKEN_SERVICE).toClass(JWTService);
-
     // Bind bcrypt hash services - utilized by 'UserController' and 'MyUserService'
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 
-    this.bind(UserServiceBindings.MANAGER_SERVICE).toClass(ManagerService);
-    this.bind(UserServiceBindings.SHIPPER_SERVICE).toClass(ShipperService);
+    this.bind(UserServiceBindings.USER_SERVICE).toClass(LogisticUserService)
   }
 }
