@@ -39,4 +39,7 @@ export namespace UserServiceBindings {
   export const MANAGER_SERVICE = BindingKey.create<UserService<User, Credentials>>(
     'services.manager.service',
   );
+  export const SHIPPER_SERVICE = BindingKey.create<UserService<User, Credentials>>(
+    'services.shipper.service',
+  );
 }

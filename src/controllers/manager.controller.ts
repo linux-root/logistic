@@ -52,46 +52,6 @@ export class ManagerController {
     public userService: UserService<User, Credentials>,
   ) {}
 
-  @post('/managers', {
-    responses: {
-      '200': {
-        description: 'Manager model instance',
-        content: {'application/json': {schema: getModelSchemaRef(Manager)}},
-      },
-    },
-  })
-  async create(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Manager, {exclude: ['id']}),
-        },
-      },
-    })
-    manager: Manager,
-  ): Promise<Manager> {
-    validateCredentials(_.pick(manager, ['email', 'password']));
-
-    // encrypt the password
-    // eslint-disable-next-line require-atomic-updates
-    manager.password = await this.passwordHasher.hashPassword(manager.password);
-
-    try {
-      // create the new user
-      const savedUser = await this.managerRepository.create(manager);
-      delete savedUser.password;
-
-      return savedUser;
-    } catch (error) {
-      // MongoError 11000 duplicate key
-      if (error.code === 11000 && error.errmsg.includes('index: uniqueEmail')) {
-        throw new HttpErrors.Conflict('Email value is already taken');
-      } else {
-        throw error;
-      }
-    }
-  }
-
   @get('/managers/count', {
     responses: {
       '200': {
