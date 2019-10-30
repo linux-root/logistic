@@ -20,13 +20,14 @@ import {
 import {User} from '../models';
 import {UserRepository} from '../repositories';
 import {PasswordHasherBindings, TokenServiceBindings, UserServiceBindings} from '../keys';
-import {TokenService, UserService} from '@loopback/authentication';
+import {authenticate, TokenService, UserService} from '@loopback/authentication';
 import {Credentials} from 'crypto';
 import {inject} from '@loopback/context';
 import {PasswordHasher} from '../services/hash.password.bcryptjs';
 import {validateCredentials} from '../services/validator';
-import {CredentialsRequestBody} from './specs/user-controller.specs';
+import {CredentialsRequestBody, UserProfileSchema} from './specs/user-controller.specs';
 import * as _ from 'lodash';
+import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
 
 
 export class UserController {
@@ -214,4 +215,24 @@ export class UserController {
     return {token};
   }
 
+  @get('/users/me', {
+    responses: {
+      '200': {
+        description: 'The current user profile',
+        content: {
+          'application/json': {
+            schema: UserProfileSchema,
+          },
+        },
+      },
+    },
+  })
+  @authenticate('jwt')
+  async printCurrentUser(
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
+  ): Promise<UserProfile> {
+    currentUserProfile.id = currentUserProfile[securityId];
+    delete currentUserProfile[securityId];
+    return currentUserProfile;
+  }
 }

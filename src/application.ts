@@ -9,15 +9,16 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import * as path from 'path';
 import {MySequence} from './sequence';
-import {AuthenticationComponent, UserService} from '@loopback/authentication';
+import {AuthenticationComponent, registerAuthenticationStrategy} from '@loopback/authentication';
 import {PasswordHasherBindings, TokenServiceBindings, TokenServiceConstants, UserServiceBindings} from './keys';
 import {JWTService} from './services/jwt-service';
 import {BcryptHasher} from './services/hash.password.bcryptjs';
 import {LogisticUserService} from './services/user-service';
+import {JWTAuthenticationStrategy} from './authentication-strategies/jwt-strategy';
 export class LogisticApplication extends BootMixin( ServiceMixin(RepositoryMixin(RestApplication))) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
-
+    registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
     this.setUpBindings();
 
     // Set up the custom sequence
@@ -32,6 +33,7 @@ export class LogisticApplication extends BootMixin( ServiceMixin(RepositoryMixin
     });
     this.component(AuthenticationComponent);
     this.component(RestExplorerComponent);
+
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
