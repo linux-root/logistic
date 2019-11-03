@@ -43,12 +43,7 @@ export class LogisticUserService implements UserService<User, Credentials> {
 
   convertToUserProfile(user: User): UserProfile {
     // since first name and lastName are optional, no error is thrown if not provided
-    let userName = '';
-/*    if (user.firstName) userName = `${user.firstName}`;
-    if (user.lastName)
-      userName = user.firstName
-        ? `${userName} ${user.lastName}`
-        : `${user.lastName}`;*/
-    return {[securityId]: user.id, name: user.full_name};
+
+    return {[securityId]: user.id, name: user.full_name, is_manager: user.is_manager};
   }
 }

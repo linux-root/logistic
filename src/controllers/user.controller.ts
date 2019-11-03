@@ -50,6 +50,7 @@ export class UserController {
       },
     },
   })
+  @authenticate('jwt')
   async create(
     @requestBody({
       content: {
@@ -123,7 +124,7 @@ export class UserController {
     return this.userRepository.updateAll(user, where);
   }
 
-  @get('/users/{id}', {
+  @get('/users/info', {
     responses: {
       '200': {
         description: 'User model instance',
@@ -131,8 +132,12 @@ export class UserController {
       },
     },
   })
-  async findById(@param.path.string('id') id: string): Promise<User> {
-    return this.userRepository.findById(id);
+  @authenticate('jwt')
+  async findByToken(@inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<User> {
+    const id = currentUserProfile[securityId];
+    const user = await this.userRepository.findById(id);
+    delete user.password;
+    return user;
   }
 
   @patch('/users/{id}', {
@@ -221,7 +226,7 @@ export class UserController {
         description: 'The current user profile',
         content: {
           'application/json': {
-            schema: UserProfileSchema,
+            schema:  UserProfileSchema,
           },
         },
       },
@@ -230,9 +235,9 @@ export class UserController {
   @authenticate('jwt')
   async printCurrentUser(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
-  ): Promise<UserProfile> {
+  ): Promise<{user: UserProfile}> {
     currentUserProfile.id = currentUserProfile[securityId];
     delete currentUserProfile[securityId];
-    return currentUserProfile;
+    return {user: currentUserProfile};
   }
 }

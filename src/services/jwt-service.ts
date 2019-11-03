@@ -56,7 +56,7 @@ export class JWTService implements TokenService {
     const userInfoForToken = {
       id: userProfile[securityId],
       name: userProfile.name,
-      email: userProfile.email,
+      email: userProfile.email
     };
     // Generate a JSON Web Token
     let token: string;
