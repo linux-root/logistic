@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, hasMany, model, property} from '@loopback/repository';
+import {Notification} from './notification.model';
 
 @model({settings: {strict: false}})
 export class User extends Entity {
@@ -49,6 +50,10 @@ export class User extends Entity {
     type: 'boolean',
   })
   is_active?: boolean;
+
+
+  @hasMany(() => Notification, {keyTo: 'notify_to'})
+  notifications?: [];
 
   // Define well-known properties here
 
