@@ -20,7 +20,9 @@ import {
   Checkpoint,
 } from '../models';
 import {RouteRepository} from '../repositories';
+import {authenticate} from '@loopback/authentication';
 
+authenticate('jwt')
 export class RouteCheckpointController {
   constructor(
     @repository(RouteRepository) protected routeRepository: RouteRepository,

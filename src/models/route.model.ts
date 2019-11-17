@@ -6,7 +6,6 @@ export class Route extends Entity {
   @property({
     type: 'string',
     id: true,
-    required: true,
     generated: false,
   })
   id: string;

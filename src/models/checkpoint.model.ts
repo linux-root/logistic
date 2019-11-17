@@ -5,7 +5,6 @@ export class Checkpoint extends Entity {
   @property({
     type: 'string',
     id: true,
-    required: true,
     generated: false,
   })
   id: string;
@@ -16,9 +15,9 @@ export class Checkpoint extends Entity {
   route_id?: string;
 
   @property({
-    type: 'geopoint',
+    type: 'object',
   })
-  geo_coordinate?: string;
+  geo_coordinate?: object;
 
   @property({
     type: 'string',

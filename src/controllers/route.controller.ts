@@ -49,7 +49,7 @@ export class RouteController {
     route: Omit<Route, 'id'>,  @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
   ): Promise<Route> {
     const createdByID = currentUserProfile[securityId];
-    console.log(createdByID);
+    console.log(`manager ${createdByID} has just added new routed name ${route.name}`);
     route.created_by = createdByID;
     return this.routeRepository.create(route);
   }
