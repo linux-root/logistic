@@ -1,11 +1,11 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Checkpoint} from './checkpoint.model';
 
 @model({settings: {}})
 export class Route extends Entity {
   @property({
     type: 'string',
     id: true,
-    required: true,
     generated: false,
   })
   id: string;
@@ -29,6 +29,9 @@ export class Route extends Entity {
     type: 'string',
   })
   name?: string;
+
+  @hasMany(() => Checkpoint ,{keyTo: 'route_id'})
+  checkpoints: Checkpoint[];
 
   constructor(data?: Partial<Route>) {
     super(data);
