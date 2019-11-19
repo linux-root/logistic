@@ -70,8 +70,9 @@ export class UserNotificationController {
       },
     }) notification: Omit<Notification, 'type'>,
   ): Promise<Notification> {
-    this.pusherService.channelClient.trigger('my-channel', 'my-event', notification);
-    return this.userRepository.notifications(id).create(notification);
+    const newNotification = await this.userRepository.notifications(id).create(notification);
+    this.pusherService.channelClient.trigger('notification', id, newNotification);
+    return newNotification;
   }
 
   @patch('/users/{id}/notifications', {
