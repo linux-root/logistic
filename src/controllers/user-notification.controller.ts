@@ -5,6 +5,7 @@ import {
   repository,
   Where,
 } from '@loopback/repository';
+import {inject} from '@loopback/core';
 import {
   del,
   get,
@@ -20,10 +21,13 @@ import {
   Notification,
 } from '../models';
 import {UserRepository} from '../repositories';
+import {PusherService} from '../services/PusherService';
+import {PusherServiceBinding} from '../keys';
 
 export class UserNotificationController {
   constructor(
     @repository(UserRepository) protected userRepository: UserRepository,
+    @inject(PusherServiceBinding.PUSHER_SERVICE) protected pusherService : PusherService
   ) { }
 
   @get('/users/{id}/notifications', {
@@ -66,6 +70,7 @@ export class UserNotificationController {
       },
     }) notification: Omit<Notification, 'type'>,
   ): Promise<Notification> {
+    this.pusherService.channelClient.trigger('my-channel', 'my-event', notification);
     return this.userRepository.notifications(id).create(notification);
   }
 

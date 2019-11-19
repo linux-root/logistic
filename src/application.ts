@@ -10,11 +10,18 @@ import {ServiceMixin} from '@loopback/service-proxy';
 import * as path from 'path';
 import {MySequence} from './sequence';
 import {AuthenticationComponent, registerAuthenticationStrategy} from '@loopback/authentication';
-import {PasswordHasherBindings, TokenServiceBindings, TokenServiceConstants, UserServiceBindings} from './keys';
+import {
+  PasswordHasherBindings,
+  PusherServiceBinding, PusherServiceConstant,
+  TokenServiceBindings,
+  TokenServiceConstants,
+  UserServiceBindings,
+} from './keys';
 import {JWTService} from './services/jwt-service';
 import {BcryptHasher} from './services/hash.password.bcryptjs';
 import {LogisticUserService} from './services/user-service';
 import {JWTAuthenticationStrategy} from './authentication-strategies/jwt-strategy';
+import {PusherService} from './services/PusherService';
 export class LogisticApplication extends BootMixin( ServiceMixin(RepositoryMixin(RestApplication))) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
@@ -61,6 +68,12 @@ export class LogisticApplication extends BootMixin( ServiceMixin(RepositoryMixin
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 
-    this.bind(UserServiceBindings.USER_SERVICE).toClass(LogisticUserService)
+    this.bind(UserServiceBindings.USER_SERVICE).toClass(LogisticUserService);
+
+    this.bind(PusherServiceBinding.APP_ID).to(PusherServiceConstant.APP_ID);
+    this.bind(PusherServiceBinding.KEY).to(PusherServiceConstant.KEY);
+    this.bind(PusherServiceBinding.CLUSTER).to(PusherServiceConstant.CLUSTER);
+    this.bind(PusherServiceBinding.SECRET).to(PusherServiceConstant.SECRET);
+    this.bind(PusherServiceBinding.PUSHER_SERVICE).toClass(PusherService);
   }
 }
