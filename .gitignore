@@ -29,7 +29,7 @@ bower_components
 
 # node-waf configuration
 .lock-wscript
-.idea
+.idea/
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
@@ -64,5 +64,3 @@ typings/
 
 # Cache used by TypeScript's incremental build
 *.tsbuildinfo
-./workspace.xml
-./Project.xml

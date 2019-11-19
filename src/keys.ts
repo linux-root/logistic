@@ -13,6 +13,20 @@ export namespace TokenServiceConstants {
   export const TOKEN_EXPIRES_IN_VALUE = '6000';
 }
 
+export namespace PusherServiceConstant{
+  export const APP_ID = '901310';
+  export const KEY = '7cbcf0b5e0b8ed0bcc80';
+}
+
+export namespace PusherServiceBinding{
+  export const APP_ID = BindingKey.create<String>(
+    'pusher.api_id'
+  );
+  export const KEY = BindingKey.create<String>(
+    'pusher.key'
+  );
+}
+
 export namespace TokenServiceBindings {
   export const TOKEN_SECRET = BindingKey.create<string>(
     'authentication.jwt.secret',
