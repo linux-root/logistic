@@ -5,6 +5,7 @@ export class Notification extends Entity {
   @property({
     type: 'string',
     required: true,
+    mongodb: {dataType: 'ObjectID'}
   })
   notify_to: string;
 
@@ -16,7 +17,7 @@ export class Notification extends Entity {
   @property({
     type: 'string',
     id: true,
-    generated: false,
+    generated: true,
   })
   id: string;
 

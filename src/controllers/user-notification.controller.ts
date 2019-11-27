@@ -70,6 +70,7 @@ export class UserNotificationController {
       },
     }) notification: Omit<Notification, 'type'>,
   ): Promise<Notification> {
+    delete notification.notify_to;
     const newNotification = await this.userRepository.notifications(id).create(notification);
     this.pusherService.channelClient.trigger('notification', id, newNotification);
     return newNotification;

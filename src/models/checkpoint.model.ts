@@ -1,18 +1,21 @@
-import {Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {Route} from './route.model';
 
 @model({settings: {strict: false}})
 export class Checkpoint extends Entity {
   @property({
     type: 'string',
     id: true,
-    generated: false,
+    generated: true,
   })
   id: string;
 
   @property({
-    type: 'string',
-  })
-  route_id?: string;
+      type: 'string',
+      mongodb: {dataType: 'ObjectID'}
+    }
+  )
+  route_id: string;
 
   @property({
     type: 'object',

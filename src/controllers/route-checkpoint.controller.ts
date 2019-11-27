@@ -21,6 +21,7 @@ import {
 } from '../models';
 import {RouteRepository} from '../repositories';
 import {authenticate} from '@loopback/authentication';
+import {HttpErrors} from '@loopback/rest/dist';
 
 authenticate('jwt')
 export class RouteCheckpointController {
@@ -68,6 +69,12 @@ export class RouteCheckpointController {
       },
     }) checkpoint: Omit<Checkpoint, 'id'>,
   ): Promise<Checkpoint> {
+    if (id !== checkpoint.route_id) {
+      throw new HttpErrors.BadRequest(
+        `User id does not match: ${id} !== ${checkpoint.route_id}`,
+      );
+    }
+    delete checkpoint.route_id;
     return this.routeRepository.checkpoints(id).create(checkpoint);
   }
 

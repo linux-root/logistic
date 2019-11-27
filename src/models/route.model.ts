@@ -6,7 +6,7 @@ export class Route extends Entity {
   @property({
     type: 'string',
     id: true,
-    generated: false,
+    generated: true,
   })
   id: string;
 
@@ -17,6 +17,7 @@ export class Route extends Entity {
 
   @property({
     type: 'string',
+    mongodb: {dataType: 'ObjectID'}
   })
   assigned_to_shipper?: string;
 
