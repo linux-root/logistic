@@ -11,6 +11,11 @@ export class Checkpoint extends Entity {
   id: string;
 
   @property({
+    type: 'number',
+  })
+  seq: number;
+
+  @property({
       type: 'string',
       mongodb: {dataType: 'ObjectID'}
     }

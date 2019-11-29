@@ -3,12 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="57c53f41-8092-457a-a85e-e6546b02bbd4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/route-checkpoint.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/route-checkpoint.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/user-notification.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/user-notification.controller.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/checkpoint.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/checkpoint.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/route.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/route.model.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
