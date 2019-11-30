@@ -1,1 +1,1 @@
-web: npm run build && node -r source-map-support/register .
+web: npm run pretest && npm start
