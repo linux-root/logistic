@@ -22,9 +22,18 @@ import {BcryptHasher} from './services/hash.password.bcryptjs';
 import {LogisticUserService} from './services/user-service';
 import {JWTAuthenticationStrategy} from './authentication-strategies/jwt-strategy';
 import {PusherService} from './services/PusherService';
+
+const OPTIONS : ApplicationConfig = {
+  rest : {
+    port: process.env.PORT  || 3000
+  }
+}
+
 export class LogisticApplication extends BootMixin( ServiceMixin(RepositoryMixin(RestApplication))) {
-  constructor(options: ApplicationConfig = {}) {
-    super(options);
+  constructor() {
+    super(OPTIONS);
+
+
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
     this.setUpBindings();
 
