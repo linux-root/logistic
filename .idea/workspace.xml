@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="57c53f41-8092-457a-a85e-e6546b02bbd4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/application.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/application.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -113,7 +115,8 @@
       <workItem from="1574149390171" duration="1321000" />
       <workItem from="1574151742540" duration="1797000" />
       <workItem from="1575020096087" duration="3270000" />
-      <workItem from="1575026240521" duration="3616000" />
+      <workItem from="1575026240521" duration="5460000" />
+      <workItem from="1575086623163" duration="1386000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of github.com:linux-root/logistic&#10;&#10;# Conflicts:&#10;#&#9;README.md">
       <created>1568602398176</created>

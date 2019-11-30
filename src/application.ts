@@ -23,17 +23,11 @@ import {LogisticUserService} from './services/user-service';
 import {JWTAuthenticationStrategy} from './authentication-strategies/jwt-strategy';
 import {PusherService} from './services/PusherService';
 
-const OPTIONS : ApplicationConfig = {
-  rest : {
-    port: process.env.PORT  || 3000
-  }
-}
+
 
 export class LogisticApplication extends BootMixin( ServiceMixin(RepositoryMixin(RestApplication))) {
-  constructor() {
-    super(OPTIONS);
-
-
+  constructor(options : ApplicationConfig = {}) {
+    super(options);
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
     this.setUpBindings();
 
