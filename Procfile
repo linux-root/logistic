@@ -1,1 +1,1 @@
-web: npm run pretest && npm start
+web: npm start
