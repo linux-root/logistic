@@ -1,5 +1,6 @@
 import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Notification} from './notification.model';
+import {Route} from './route.model';
 
 @model({settings: {strict: false}})
 export class User extends Entity {
@@ -55,6 +56,8 @@ export class User extends Entity {
   @hasMany(() => Notification, {keyTo: 'notify_to'})
   notifications?: [];
 
+  @hasMany(() => Route ,{keyTo: 'assigned_to_shipper'})
+  routes: Route[];
   // Define well-known properties here
 
   // Indexer property to allow additional data

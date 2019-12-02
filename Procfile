@@ -1,1 +1,1 @@
-web: node -r source-map-support/register .
+web: lnode -r source-map-support/register .
