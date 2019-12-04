@@ -3,12 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="57c53f41-8092-457a-a85e-e6546b02bbd4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controllers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/route.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/route.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/user.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/user.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repositories/route.repository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/repositories/route.repository.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repositories/user.repository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/repositories/user.repository.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controllers/user.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/user.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/index.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -123,7 +119,7 @@
       <workItem from="1575099783457" duration="2129000" />
       <workItem from="1575179729537" duration="2374000" />
       <workItem from="1575204670164" duration="2122000" />
-      <workItem from="1575252025144" duration="1314000" />
+      <workItem from="1575252025144" duration="12083000" />
     </task>
     <task id="LOCAL-00001" summary="Merge branch 'master' of github.com:linux-root/logistic&#10;&#10;# Conflicts:&#10;#&#9;README.md">
       <created>1568602398176</created>

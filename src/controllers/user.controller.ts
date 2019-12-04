@@ -17,9 +17,9 @@ import {
   del,
   requestBody,
 } from '@loopback/rest';
-import {User} from '../models';
+import {Location, User} from '../models';
 import {UserRepository} from '../repositories';
-import {PasswordHasherBindings, TokenServiceBindings, UserServiceBindings} from '../keys';
+import {PasswordHasherBindings, PusherServiceBinding, TokenServiceBindings, UserServiceBindings} from '../keys';
 import {authenticate, TokenService, UserService} from '@loopback/authentication';
 import {Credentials} from 'crypto';
 import {inject} from '@loopback/context';
@@ -28,6 +28,7 @@ import {validateCredentials} from '../services/validator';
 import {CredentialsRequestBody, UserProfileSchema} from './specs/user-controller.specs';
 import * as _ from 'lodash';
 import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
+import {PusherService} from '../services/PusherService';
 
 
 export class UserController {
@@ -40,6 +41,8 @@ export class UserController {
     public jwtService: TokenService,
     @inject(UserServiceBindings.USER_SERVICE)
     public userService: UserService<User, Credentials>,
+    @inject(PusherServiceBinding.PUSHER_SERVICE)
+    public pusherService: PusherService
   ) {}
 
   @post('/users', {
@@ -239,5 +242,26 @@ export class UserController {
     currentUserProfile.id = currentUserProfile[securityId];
     delete currentUserProfile[securityId];
     return {user: currentUserProfile};
+  }
+
+  @post('/users/location', {
+    responses: {
+      '200': {
+        description: 'user\'s location updated',
+        content: {'application/json': {schema: getModelSchemaRef(Location)}
+      }
+    }
+  }})
+  // @authenticate('jwt')
+  async sendLocation(
+    @requestBody({
+      content: { 'application/json': { schema: getModelSchemaRef(Location) }},
+    }) location: Location, ): Promise<Location> {
+
+    const geoLoc = {lat: location.lat, lng: location.lng}
+    console.log(`shipper ${location.shipper_id} send location: `, geoLoc)
+   this.pusherService.channelClient.trigger('shipper-position', location.shipper_id, geoLoc)
+
+    return location;
   }
 }
