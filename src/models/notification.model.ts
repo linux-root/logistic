@@ -28,6 +28,12 @@ export class Notification extends Entity {
 
   @property({
     type: 'string',
+    default: 'U'
+  })
+  status?: string;
+
+  @property({
+    type: 'string',
   })
   created_by?: string;
 

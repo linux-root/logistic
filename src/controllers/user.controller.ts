@@ -252,7 +252,7 @@ export class UserController {
       }
     }
   }})
-  // @authenticate('jwt')
+  @authenticate('jwt')
   async sendLocation(
     @requestBody({
       content: { 'application/json': { schema: getModelSchemaRef(Location) }},

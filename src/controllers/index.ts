@@ -6,3 +6,4 @@ export * from './user-notification.controller';
 export * from './user-route.controller';
 export * from './route-user.controller';
 export * from './route-user.controller';
+export * from './notification.controller';
