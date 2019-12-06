@@ -29,6 +29,11 @@ export class LogisticUserService implements UserService<User, Credentials> {
     if (!foundUser) {
       throw new HttpErrors.Unauthorized(invalidCredentialsError);
     }
+
+    if(!foundUser.is_active){
+      throw new HttpErrors.Conflict('User account has been disabled')
+    }
+
     const passwordMatched = await this.passwordHasher.comparePassword(
       credentials.password,
       foundUser.password,

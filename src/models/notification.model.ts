@@ -12,7 +12,7 @@ export class Notification extends Entity {
   @property({
     type: 'string',
   })
-  type?: string;
+  notification_type?: string;
 
   @property({
     type: 'string',
