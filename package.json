@@ -57,7 +57,7 @@
     "isemail": "^3.2.0",
     "jsonwebtoken": "^8.5.1",
     "loopback-connector-mongodb": "^5.2.1",
-    "pusher": "^3.0.0",
+    "pusher": "^5.2.0",
     "source-map-support": "^0.5.13"
   },
   "devDependencies": {
